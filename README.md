@@ -25,4 +25,4 @@ This repository is created and maintained by the team and the community of Hexle
 
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/mkolotovich/frontend-project-lvl4/workflows/hexlet-check/badge.svg)](https://github.com/mkolotovich/frontend-project-lvl4/actions)
-link on heroku - https://hexletslack.herokuapp.com/
+link on heroku - https://serene-beyond-92892.herokuapp.com/
