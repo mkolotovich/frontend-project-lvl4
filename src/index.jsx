@@ -1,11 +1,9 @@
-// @ts-check
-
 import 'core-js/stable/index.js';
 import 'regenerator-runtime/runtime.js';
 
 import '../assets/application.scss';
 
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import {
@@ -13,12 +11,15 @@ import {
   Routes,
   Route,
   Link,
+  useNavigate,
 } from 'react-router-dom';
 
 import {
   Formik, Form, Field, ErrorMessage,
 } from 'formik';
 import * as Yup from 'yup';
+
+import axios from 'axios';
 
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
@@ -35,27 +36,38 @@ const SignupSchema = Yup.object().shape({
     .required('Required'),
 });
 
+const signed = [{ name: 'signError', value: false }, { name: 'signError', value: true }];
+
+const UserContext = React.createContext({
+  signed: [],
+  sign: {},
+  setSign: () => {},
+});
+
 export default function App() {
+  const [sign, setSign] = useState(signed[0]);
   return (
-    <Router>
-      <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-          </ul>
-        </nav>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/" element={<Home />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </div>
-    </Router>
+    <UserContext.Provider value={{ sign, setSign: (name) => setSign({ name }), signed }}>
+      <Router>
+        <div>
+          <nav>
+            <ul>
+              <li>
+                <Link to="/">Home</Link>
+              </li>
+              <li>
+                <Link to="/login">Login</Link>
+              </li>
+            </ul>
+          </nav>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route path="/" element={<Home />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+      </Router>
+    </UserContext.Provider>
   );
 }
 
@@ -64,6 +76,9 @@ function Home() {
 }
 
 function Login() {
+  const navigate = useNavigate();
+  const { sign } = useContext(UserContext);
+  console.log(sign);
   return (
     <div>
       <h2>Login</h2>
@@ -73,8 +88,23 @@ function Login() {
           pass: '',
         }}
         validationSchema={SignupSchema}
-        onSubmit={(values) => {
+        onSubmit={async (values) => {
           console.log(values);
+          const { name, pass } = values;
+          try {
+            const { data } = await axios.post('/api/v1/login', { username: name, password: pass });
+            console.log(data);
+            const { token, username } = data;
+            localStorage.setItem(username, token);
+            navigate('/');
+            if (!localStorage.getItem(username)) {
+              navigate('/login');
+            }
+          } catch (err) {
+            console.log(err);
+            sign.value = !sign.value;
+            console.log(sign.value);
+          }
         }}
       >
         {({ isSubmitting }) => (
@@ -83,6 +113,7 @@ function Login() {
             <ErrorMessage name="name" component="div" />
             <Field name="pass" placeholder="password" />
             <ErrorMessage name="pass" component="div" />
+            {sign.value && <div>Authorization Error!</div>}
             <button type="submit" disabled={isSubmitting}>Submit</button>
           </Form>
         )}
