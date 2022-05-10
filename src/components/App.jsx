@@ -12,6 +12,7 @@ import {
   Route,
   Link,
   useNavigate,
+  // Navigate,
 } from 'react-router-dom';
 
 import {
@@ -20,9 +21,11 @@ import {
 import * as Yup from 'yup';
 
 import axios from 'axios';
-
+import { io } from 'socket.io-client';
 import { getAllChannels } from '../slices/channelsSlice.js';
-import { getAllMessages } from '../slices/messagesSlice.js';
+import { getAllMessages, sendMessage, sendNewMessage } from '../slices/messagesSlice.js';
+import { changeChannel } from '../slices/currentChanelSlice.js';
+import routes from '../routes.js';
 
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
@@ -40,6 +43,7 @@ const SignupSchema = Yup.object().shape({
 });
 
 const signed = [{ name: 'signError', value: false }, { name: 'signError', value: true }];
+// const signed = [{ name: 'signError', value: false, sign: false }];
 
 const UserContext = React.createContext({
   signed: [],
@@ -77,10 +81,15 @@ export default function App() {
 function Home() {
   const allChannels = useSelector((state) => state.channels.value);
   const allMessages = useSelector((state) => state.messages.value);
+  const currentChannel = useSelector((state) => state.currentChannel.value);
   console.log('allChannels', allChannels);
   console.log(allMessages);
+  const { sign } = useContext(UserContext);
+  console.log(sign);
+  const dispatch = useDispatch();
   return (
     <div className="container">
+      {/* {sign.sign ? <Navigate to="/" /> : <Navigate to="/login" />} */}
       <div className="row">
         <div className="col">
           <div>Chanells</div>
@@ -96,8 +105,35 @@ function Home() {
               initialValues={{
                 message: '',
               }}
-              onSubmit={(values) => {
+              onSubmit={async (values) => {
                 console.log(values);
+                // const payload = { text: values.message };
+                // const submitSuccessful = await dispatch(sendNewMessage(currentChannel, payload));
+                // console.log(submitSuccessful);
+                const { data } = await axios.post(routes.channelMessagesPath(currentChannel), values);
+                // const { data } = await axios.post('/api/v1/channels/:1/messages', (req, reply) => {
+                //   const { data: { attributes } } = req.body;
+                //   const message = {
+                //     ...attributes,
+                //     channelId: Number(req.params.channelId),
+                //     id: getNextId(),
+                //   };
+                //   console.log(reply);
+                // });
+                console.log(data);
+                // const socket = io('http://localhost:5000'); // routes.channelMessagesPath(1);
+                // socket.on('connect', () => {
+                //   console.log(socket.connected); // true
+                // });
+                // const socket = io(`http://localhost:5000${routes.channelMessagesPath(1)}`);
+                // socket.on('newMessage', () => {
+                //   console.log(socket.connected); // true
+                // });
+                // socket.on('connect', () => {
+                //   socket.emit('newMessage', values.message);
+                //   console.log(socket.connected); // true
+                // });
+                // dispatch(sendMessage({ id: 1, message: values.message }));
               }}
             >
               {({ isSubmitting }) => (
@@ -137,16 +173,17 @@ function Login() {
             console.log(data);
             const { token, username } = data;
             localStorage.setItem(username, token);
-            navigate('/');
-            if (!localStorage.getItem(username)) {
-              navigate('/login');
-            }
+            sign.sign = !sign.sign;
             const { data: userData } = await axios.get('/api/v1/data', { headers: { Authorization: `Bearer ${token}` } });
             console.log(userData);
             const { channels, messages } = userData;
             console.log(channels);
             dispatch(getAllChannels(channels));
             dispatch(getAllMessages(messages));
+            navigate('/');
+            if (!localStorage.getItem(username)) {
+              navigate('/login');
+            }
           } catch (err) {
             console.log(err);
             sign.value = !sign.value;
