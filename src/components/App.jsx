@@ -81,7 +81,7 @@ export default function App() {
 function Home() {
   const allChannels = useSelector((state) => state.channels.value);
   const allMessages = useSelector((state) => state.messages.value);
-  const currentChannel = useSelector((state) => state.currentChannel.value);
+  const currentChannelId = useSelector((state) => state.currentChannel.value);
   console.log('allChannels', allChannels);
   console.log(allMessages);
   const { sign } = useContext(UserContext);
@@ -110,7 +110,24 @@ function Home() {
                 // const payload = { text: values.message };
                 // const submitSuccessful = await dispatch(sendNewMessage(currentChannel, payload));
                 // console.log(submitSuccessful);
-                const { data } = await axios.post(routes.channelMessagesPath(currentChannel), values);
+                // const currentChannel = allChannels.find((el) => el.id === currentChannelId);
+                // const { name } = currentChannel;
+                // const { data } = await axios.post(routes.channelPath(currentChannel), {currentChannel});
+                // const { data } = await axios.post(routes.channelMessagesPath(name), values);
+                // const token = localStorage.getItem('admin');
+                // const { data: userData } = await axios.get('/api/v1/data', { headers: { Authorization: `Bearer ${token}` } });
+                // console.log(userData);
+                // const { data } = await axios.post(routes.channelMessagesPath(currentChannelId), values);
+                // let socket = new WebSocket("ws://localhost:5000/api/v1/channels/1/messages");
+                let socket = new WebSocket("wss://serene-beyond-92892.herokuapp.com/api/v1/channels/1/messages");
+                socket.send(values);
+                // ws.onmessage = ({data}) => {
+                //   console.log(data);
+                // }
+                // ws.onopen = () => ws.send('Text');
+
+                // exampleSocket.send("Вот текст, который будет отправлен серверу.");
+                // const { data } = await axios.post('/api/v1/channels/1/messages', values);
                 // const { data } = await axios.post('/api/v1/channels/:1/messages', (req, reply) => {
                 //   const { data: { attributes } } = req.body;
                 //   const message = {
@@ -120,7 +137,8 @@ function Home() {
                 //   };
                 //   console.log(reply);
                 // });
-                console.log(data);
+                // console.log(data);
+                // console.log(exampleSocket);
                 // const socket = io('http://localhost:5000'); // routes.channelMessagesPath(1);
                 // socket.on('connect', () => {
                 //   console.log(socket.connected); // true
