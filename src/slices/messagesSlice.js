@@ -14,9 +14,14 @@ const counterSlice = createSlice({
     sendMessage: (state, action) => {
       state.value.push(action.payload);
     },
+    removeChannelMessages: (state, action) => {
+      const { id } = action.payload;
+      const filteredMessages = state.value.filter((el) => el.channelId !== id);
+      state.value = filteredMessages;
+    },
   },
 });
 
-export const { getAllMessages, sendMessage } = counterSlice.actions;
+export const { getAllMessages, sendMessage, removeChannelMessages } = counterSlice.actions;
 
 export default counterSlice.reducer;

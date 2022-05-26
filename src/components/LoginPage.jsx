@@ -21,8 +21,7 @@ const SignupSchema = Yup.object().shape({
 function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
-  const auth = useAuth();
-  const { logIn, setUsername } = useAuth();
+  const { logIn } = useAuth();
   return (
     <div>
       <h2>Login</h2>
@@ -40,9 +39,10 @@ function Login() {
             console.log(data);
             const { token, username } = data;
             logIn();
-            setUsername(username);
             console.log(username);
-            localStorage.setItem('userId', token);
+            const user = {userId: token, user: username};
+            console.log(user);
+            localStorage.setItem('user', JSON.stringify(user));
             navigate('/');
           } catch (err) {
             console.log(err);
