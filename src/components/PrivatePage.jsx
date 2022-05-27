@@ -43,7 +43,7 @@ const Home = () => {
   const [showRename, setShowRename] = useState(false);
   const handleCloseRename = () => setShowRename(false);
   const [inputValue, setValue] = useState('');
-  console.log(inputValue);
+  console.log(auth);
   const handleShowRemove = (e) => {
     e.preventDefault();
     const eventTarget = e.target;
@@ -66,18 +66,18 @@ const Home = () => {
   };
   useEffect(() => {
     const request = async () => {
-        const token = user.userId;
-        console.log(token);
-        const { data: userData } = await axios.get('/api/v1/data', { headers: { Authorization: `Bearer ${token}` } });
-        console.log(userData);
-        const { channels, messages } = userData;
-        console.log(channels);
-        dispatch(getAllChannels(channels));
-        console.log('allMessages', messages);
-        dispatch(getAllMessages(messages));
-        const channeltMessages = messages.filter((el) => el.channel === currentChannelId);
-        console.log(channeltMessages);
-        auth.logIn();
+      const token = user.userId;
+      console.log(token);
+      const { data: userData } = await axios.get('/api/v1/data', { headers: { Authorization: `Bearer ${token}` } });
+      console.log(userData);
+      const { channels, messages } = userData;
+      console.log(channels);
+      dispatch(getAllChannels(channels));
+      console.log('allMessages', messages);
+      dispatch(getAllMessages(messages));
+      const channeltMessages = messages.filter((el) => el.channel === currentChannelId);
+      console.log(channeltMessages);
+      auth.logIn();
     };
     if (localStorage.getItem('user')) {
       request();

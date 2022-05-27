@@ -62,6 +62,7 @@ function Login() {
           </Form>
         )}
       </Formik>
+      <a href='/signup'>Registration</a>
     </div>
   );
 }

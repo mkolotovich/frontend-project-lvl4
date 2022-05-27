@@ -4,8 +4,7 @@ import 'regenerator-runtime/runtime.js';
 import '../../assets/application.scss';
 
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { normalize, schema } from 'normalizr';
+import { useDispatch } from 'react-redux';
 import {
   BrowserRouter as Router,
   Routes,
@@ -17,21 +16,24 @@ import { sendMessage } from '../slices/messagesSlice.js';
 import { addChannel, removeChannel, renameChannel } from '../slices/channelsSlice.js';
 import { removeChannelMessages } from '../slices/messagesSlice.js';
 import { changeChannel } from '../slices/currentChanelSlice.js';
-import useAuth from '../hooks/index.jsx';
 import LoginPage from './LoginPage.jsx';
 import PrivatePage from './PrivatePage.jsx';
 import NotFound from './NotFoundPage.jsx';
+import SignupPage from './SignupPage.jsx';
+import AuthButton from './AuthButton.jsx';
 import AuthContext from '../contexts/index.jsx';
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
 }
+
 export const socket = io();
 
 const AuthProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const value = localStorage.getItem('user') ? true : false;
+  const [loggedIn, setLoggedIn] = useState(value);
   const logIn = () => setLoggedIn(true);
   const logOut = () => {
-    localStorage.removeItem('userId');
+    localStorage.removeItem('user');
     setLoggedIn(false);
   };
 
@@ -45,7 +47,6 @@ const AuthProvider = ({ children }) => {
 export default function App() {
   const dispatch = useDispatch();
   const defaultChannelId = 1;
-
   socket.on('newMessage', async (data) => {
     console.log('data', data);
     dispatch(sendMessage(data));
@@ -70,19 +71,18 @@ export default function App() {
      <AuthProvider> 
       <Router>
         <div>
-          <nav>
+          <nav className='d-flex justify-content-between'>
             <ul>
               <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/login">Login</Link>
+                <Link to="/">Hexlet Chat</Link>
               </li>
             </ul>
+            <AuthButton />
           </nav>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
             <Route path="/" element={<PrivatePage />} />  
+            <Route path="/signup" element={<SignupPage />} />  
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
