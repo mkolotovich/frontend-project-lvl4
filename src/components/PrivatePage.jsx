@@ -9,6 +9,7 @@ import axios from 'axios';
 import { Dropdown } from 'react-bootstrap';
 import { useTranslation } from "react-i18next";
 import { ToastContainer, toast } from 'react-toastify';
+import filter from 'leo-profanity';
 import { getAllChannels } from '../slices/channelsSlice.js';
 import { getAllMessages } from '../slices/messagesSlice.js';
 import { changeChannel } from '../slices/currentChanelSlice.js';
@@ -126,7 +127,7 @@ const Home = () => {
               onSubmit={async(values) => {
                 console.log(values);
                 if (inputValue !== '') {
-                  socket.emit('newMessage', { text: inputValue, channelId: currentChannelId, username: user.user }, (response) => {
+                  socket.emit('newMessage', { text: filter.clean(inputValue), channelId: currentChannelId, username: user.user }, (response) => {
                     console.log(response.status); // ok
                   });
                   setValue('');
