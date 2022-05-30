@@ -2,6 +2,7 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useTranslation } from "react-i18next";
+import { ToastContainer, toast } from 'react-toastify';
 import { socket } from './App.jsx';
 
 export default (props) => {
@@ -24,6 +25,7 @@ export default (props) => {
           socket.emit('removeChannel', {id}, (response) => {
             console.log(response.status); // ok
           });
+          toast(t('channelRemoved'));
         }}>
           {t('remove')}
         </Button>

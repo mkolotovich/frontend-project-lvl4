@@ -14,7 +14,7 @@ const SignupSchema = (t) => Yup.object().shape({
     .max(20, t('lengthText'))
     .required(t('required')),
   pass: Yup.string()
-    .min(6, t('tooShort'))
+    .min(5, t('tooShort'))
     .required(t('required')),
 });
   

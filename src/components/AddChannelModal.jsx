@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useTranslation } from "react-i18next";
+import { ToastContainer, toast } from 'react-toastify';
 import { socket } from './App.jsx';
 
 export default(props) => {
@@ -47,11 +48,13 @@ export default(props) => {
             socket.emit('newChannel', { name: inputValue }, (response) => {
               console.log(response.status); // ok
             });
+            toast(t('channelAdded'));
           }
         }}>
           {t('send')}
         </Button>
       </Modal.Footer>
+      <ToastContainer />
     </Modal>
   );
 }

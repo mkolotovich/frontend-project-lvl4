@@ -8,6 +8,7 @@ import useAuth from '../hooks/index.jsx';
 import axios from 'axios';
 import { Dropdown } from 'react-bootstrap';
 import { useTranslation } from "react-i18next";
+import { ToastContainer, toast } from 'react-toastify';
 import { getAllChannels } from '../slices/channelsSlice.js';
 import { getAllMessages } from '../slices/messagesSlice.js';
 import { changeChannel } from '../slices/currentChanelSlice.js';
@@ -81,7 +82,11 @@ const Home = () => {
       auth.logIn();
     };
     if (localStorage.getItem('user')) {
-      request();
+      try {
+        request();
+      } catch(err) {
+        toast(err)
+      }
     } else {
       navigate('/login');
     }
@@ -142,6 +147,7 @@ const Home = () => {
       <AddChannelModal show={show} handleClose={handleClose}/>
       <RemoveChannelModal show={showRemove} handleClose={handleCloseRemove} channel={channelRemove}/>
       <RenameChannelModal show={showRename} handleClose={handleCloseRename} channel={channelRemove}/>
+      <ToastContainer />
     </div>
   );
 }
