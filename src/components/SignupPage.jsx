@@ -5,21 +5,20 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { useTranslation } from "react-i18next";
 import useAuth from '../hooks/index.jsx';
 
-const SignupSchema = Yup.object().shape({
+const SignupSchema = (t) => Yup.object().shape({
   name: Yup.string()
-    .min(3, 'Too Short!')
-    .max(20, 'Too Long!')
-    .required('Required'),  
+    .min(3, t('lengthText'))
+    .max(20, t('lengthText'))
+    .required(t('required')),  
   pass: Yup.string()
-    .min(6, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
+    .min(6, t('tooShort'))
+    .required(t('required')),
   passConfirm: Yup.string()
-    .min(6, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
+    .min(6, t('tooShort'))
+    .required(t('required')),
 });
 
 export default () => {
@@ -27,18 +26,19 @@ export default () => {
   const [passError, setError] = useState(false);
   const [userError, setUserError] = useState(false);
   const error = passError || userError ? true : false;
-  const errorMessage = passError ? 'Pass and passConfirm must be equal!' : 'This user is already exists!';
+  const { t } = useTranslation();
+  const errorMessage = passError ? t('passText') : t('userText');
   const { logIn } = useAuth();
   return (
     <div>
-      <h2>Signup</h2>
+      <h2>{t('registration')}</h2>
       <Formik
         initialValues={{
           name: '',
           pass: '',
           passConfirm: '',
         }}
-        validationSchema={SignupSchema}
+        validationSchema={SignupSchema(t)}
         onSubmit={async (values) => {
           console.log(values);
           const { name, pass, passConfirm } = values;
@@ -58,7 +58,7 @@ export default () => {
             } catch (err) {
               console.log(err);
               setUserError(!userError);
-              setError(!passError);
+              setError(false);
               console.log(sign.value);
             }
           }
@@ -66,14 +66,14 @@ export default () => {
       >
         {({ isSubmitting }) => (
           <Form>
-            <Field name="name" placeholder="name" />
+            <Field name="name" placeholder={t('name')} />
             <ErrorMessage name="name" component="div" />
-            <Field name="pass" placeholder="password"/>
+            <Field name="pass" placeholder={t('password')}/>
             <ErrorMessage name="pass" component="div" />
-            <Field name="passConfirm" placeholder="password confirmation"/>
+            <Field name="passConfirm" placeholder={t('passwordConfirm')}/>
             <ErrorMessage name="passConfirm" component="div" />
             {error && <div>{errorMessage}</div>}
-            <button type="submit" disabled={isSubmitting}>Submit</button>
+            <button type="submit" disabled={isSubmitting}>{t('register')}</button>
           </Form>
         )}
       </Formik>

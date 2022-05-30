@@ -5,32 +5,33 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
+import { useTranslation } from "react-i18next";
 import useAuth from '../hooks/index.jsx';
 
-const SignupSchema = Yup.object().shape({
+const SignupSchema = (t) => Yup.object().shape({
   name: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
+    .min(3, t('lengthText'))
+    .max(20, t('lengthText'))
+    .required(t('required')),
   pass: Yup.string()
-    .min(2, 'Too Short!')
-    .max(50, 'Too Long!')
-    .required('Required'),
+    .min(6, t('tooShort'))
+    .required(t('required')),
 });
   
 function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
   const { logIn } = useAuth();
+  const { t } = useTranslation();
   return (
     <div>
-      <h2>Login</h2>
+      <h2>{t('logIn')}</h2>
       <Formik
         initialValues={{
           name: '',
           pass: '',
         }}
-        validationSchema={SignupSchema}
+        validationSchema={SignupSchema(t)}
         onSubmit={async (values) => {
           console.log(values);
           const { name, pass } = values;
@@ -53,16 +54,16 @@ function Login() {
       >
         {({ isSubmitting }) => (
           <Form>
-            <Field name="name" placeholder="name" />
+            <Field name="name" placeholder={t('nick')} />
             <ErrorMessage name="name" component="div" />
-            <Field name="pass" placeholder="password" />
+            <Field name="pass" placeholder={t('password')}  />
             <ErrorMessage name="pass" component="div" />
-            {error && <div>Authorization Error!</div>}
-            <button type="submit" disabled={isSubmitting}>Submit</button>
+            {error && <div>{t('authorizationText')}</div>}
+            <button type="submit" disabled={isSubmitting}>{t('logIn')}</button>
           </Form>
         )}
       </Formik>
-      <a href='/signup'>Registration</a>
+      <a href='/signup'>{t('registration')}</a>
     </div>
   );
 }

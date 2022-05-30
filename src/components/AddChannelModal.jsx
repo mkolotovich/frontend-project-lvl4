@@ -1,20 +1,22 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { useTranslation } from "react-i18next";
 import { socket } from './App.jsx';
 
-function Example(props) {
+export default(props) => {
   const { show, handleClose } = props;
   const [inputValue, setValue] = useState('');
   const allChannels = useSelector((state) => state.channels.value);
   const [duplicateError, setError] = useState(false);
   const [lengthError, setLengthError] = useState(false);
   const error = duplicateError || lengthError ? true : false;
-  const errorMessage = duplicateError ? 'Channel must be unique!' : 'Channel name must be no longer 20 characters!';
+  const { t } = useTranslation();
+  const errorMessage = duplicateError ? t('duplicateText') : t('lengthText');
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Add channel</Modal.Title>
+        <Modal.Title>{t('addChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -32,7 +34,7 @@ function Example(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Close
+          {t('close')}
         </Button>
         <Button variant="primary" onClick={async() => {
           if (allChannels.some((el) => el.name === inputValue)) {
@@ -47,11 +49,9 @@ function Example(props) {
             });
           }
         }}>
-          Save Changes
+          {t('send')}
         </Button>
       </Modal.Footer>
     </Modal>
   );
 }
-
-export default Example;

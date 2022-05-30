@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
+import { useTranslation } from "react-i18next";
 import { socket } from './App.jsx';
 
 export default(props) => {
@@ -8,10 +9,11 @@ export default(props) => {
   const [inputValue, setValue] = useState('');
   const allChannels = useSelector((state) => state.channels.value);
   const [error, setError] = useState(false);
+  const { t } = useTranslation();
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Rename channel</Modal.Title>
+        <Modal.Title>{t('renameChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
@@ -24,12 +26,12 @@ export default(props) => {
               onChange={(e) => setValue(e.target.value)}
             />
           </Form.Group>
-          {error && <div>Channel must be unique!</div>}
+          {error && <div>{t('duplicateText')}</div>}
         </Form>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="secondary" onClick={handleClose}>
-          Close
+          {t('close')}
         </Button>
         <Button variant="primary" onClick={async() => {
           const { id } = allChannels.find((el) => el.name === channel);
@@ -42,7 +44,7 @@ export default(props) => {
             });
           }
         }}>
-          Save Changes
+          {t('send')}
         </Button>
       </Modal.Footer>
     </Modal>

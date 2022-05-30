@@ -7,6 +7,7 @@ import {
 import useAuth from '../hooks/index.jsx';
 import axios from 'axios';
 import { Dropdown } from 'react-bootstrap';
+import { useTranslation } from "react-i18next";
 import { getAllChannels } from '../slices/channelsSlice.js';
 import { getAllMessages } from '../slices/messagesSlice.js';
 import { changeChannel } from '../slices/currentChanelSlice.js';
@@ -43,7 +44,7 @@ const Home = () => {
   const [showRename, setShowRename] = useState(false);
   const handleCloseRename = () => setShowRename(false);
   const [inputValue, setValue] = useState('');
-  console.log(auth);
+  const { t } = useTranslation();
   const handleShowRemove = (e) => {
     e.preventDefault();
     const eventTarget = e.target;
@@ -91,8 +92,8 @@ const Home = () => {
     <div className="container">
       <div className="row">
         <div className="col">
-          <div>Chanells
-            <button onClick = {handleShow}>Add channel</button>
+          <div>{t('channels')}
+            <button onClick = {handleShow}>+</button>
           </div>
           <ul>
             {allChannels.map((channel) => 
@@ -101,8 +102,8 @@ const Home = () => {
                 {channel.removable && <Dropdown>
                   <Dropdown.Toggle variant="success" id="dropdown-basic"></Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1" onClick = {(e) => handleShowRemove(e)}>Remove</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2" onClick = {(e) => handleShowRename(e)}>Rename</Dropdown.Item>
+                    <Dropdown.Item href="#/action-1" onClick = {(e) => handleShowRemove(e)}>{t('remove')}</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2" onClick = {(e) => handleShowRename(e)}>{t('rename')}</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>}
               </li>)
@@ -129,9 +130,9 @@ const Home = () => {
             >
               {({ isSubmitting }) => (
                 <Form>
-                  <Field name="message" placeholder="message" onChange={(e) => setValue(e.target.value)} value={inputValue}/>
+                  <Field name="message" placeholder={t('message')} onChange={(e) => setValue(e.target.value)} value={inputValue}/>
                   <ErrorMessage name="message" component="div" />
-                  <button type="submit" disabled={isSubmitting}>Submit</button>
+                  <button type="submit" disabled={isSubmitting}>{'->'}</button>
                 </Form>
               )}
             </Formik>
