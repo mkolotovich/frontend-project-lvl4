@@ -7,13 +7,14 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
   BrowserRouter as Router,
-  Routes,
   Route,
   Link,
+  Routes 
 } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import i18n from "i18next";
 import { useTranslation, initReactI18next } from "react-i18next";
+import { ErrorBoundary, RollbarContext, Provider } from '@rollbar/react';
 import { sendMessage } from '../slices/messagesSlice.js';
 import { addChannel, removeChannel, renameChannel } from '../slices/channelsSlice.js';
 import { removeChannelMessages } from '../slices/messagesSlice.js';
@@ -78,6 +79,15 @@ i18n
 
 export const socket = io();
 
+const rollbarConfig = {
+  accessToken: '35e495b1164e48aab3f3ebdd9fd1dfd3',
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+  payload: {
+    environment: 'production',
+  },
+};
+
 const AuthProvider = ({ children }) => {
   const value = localStorage.getItem('user') ? true : false;
   const [loggedIn, setLoggedIn] = useState(value);
@@ -119,25 +129,29 @@ export default function App() {
     dispatch(renameChannel(data));
   });
   return (
-     <AuthProvider> 
-      <Router>
-        <div>
-          <nav className='d-flex justify-content-between'>
-            <ul>
-              <li>
-                <Link to="/">{t('headerText')}</Link>
-              </li>
-            </ul>
-            <AuthButton />
-          </nav>
-          <Routes>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/" element={<PrivatePage />} />  
-            <Route path="/signup" element={<SignupPage />} />  
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </div>
-      </Router>
+    <AuthProvider> 
+      <Provider config={rollbarConfig}>
+        <ErrorBoundary>
+          <Router>
+            <div>
+              <nav className='d-flex justify-content-between'>
+                <ul>
+                  <li>
+                    <Link to="/">{t('headerText')}</Link>
+                  </li>
+                </ul>
+                <AuthButton />
+              </nav>
+              <Routes>
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/" element={<PrivatePage />} />  
+                <Route path="/signup" element={<SignupPage />} />  
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </div>
+          </Router>
+        </ErrorBoundary>
+      </Provider>
     </AuthProvider>
   );
 }

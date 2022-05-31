@@ -2,7 +2,7 @@ import React from 'react';
 import {
   Link,
   useLocation,
-  useNavigate
+  useNavigate,
 } from 'react-router-dom';
 import { useTranslation } from "react-i18next";
 import { Button } from 'react-bootstrap';
