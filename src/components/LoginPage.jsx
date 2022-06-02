@@ -54,10 +54,16 @@ function Login() {
       >
         {({ isSubmitting }) => (
           <Form>
-            <Field name="name" placeholder={t('nick')} />
-            <ErrorMessage name="name" component="div" />
-            <Field name="pass" placeholder={t('password')}  />
-            <ErrorMessage name="pass" component="div" />
+            <label>
+              {t('nick')}
+              <Field name="name"/>
+              <ErrorMessage name="name" component="div" />
+            </label>
+            <label>
+              {t('password')}
+              <Field name="pass"/>
+              <ErrorMessage name="pass" component="div" />
+            </label>
             {error && <div>{t('authorizationText')}</div>}
             <button type="submit" disabled={isSubmitting}>{t('logIn')}</button>
           </Form>

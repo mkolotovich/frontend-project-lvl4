@@ -20,11 +20,8 @@ const SignupSchema = (t) => Yup.object().shape({
 
 export default () => {
   const navigate = useNavigate();
-  const [passError, setError] = useState(false);
   const [userError, setUserError] = useState(false);
-  const error = passError || userError ? true : false;
   const { t } = useTranslation();
-  const errorMessage = passError ? t('passText') : t('userText');
   const { logIn } = useAuth();
   return (
     <div>
@@ -45,10 +42,7 @@ export default () => {
         validationSchema={SignupSchema(t)}
         onSubmit={async (values) => {
           console.log(values);
-          const { name, pass, passConfirm } = values;
-          if (pass !== passConfirm) {
-            setError(!passError);
-          } else {
+          const { name, pass } = values;
             try {
               const { data } = await axios.post('/api/v1/signup', { username: name, password: pass });
               console.log(data);
@@ -62,10 +56,8 @@ export default () => {
             } catch (err) {
               console.log(err);
               setUserError(!userError);
-              setError(false);
               console.log(sign.value);
             }
-          }
         }}
       >
         {({ isSubmitting }) => (
@@ -85,7 +77,7 @@ export default () => {
               <Field name="passConfirm"/>
               <ErrorMessage name="passConfirm" component="div" />
             </label>
-            {error && <div>{errorMessage}</div>}
+            {userError && <div>{t('userText')}</div>}
             <button type="submit" disabled={isSubmitting}>{t('register')}</button>
           </Form>
         )}
