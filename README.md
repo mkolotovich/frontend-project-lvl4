@@ -1,4 +1,4 @@
-# project-frontend-l4-server
+# project-frontend-l4
 
 [![github action status](https://github.com/hexlet-components/projects-frontend-l4-server/workflows/Node%20CI/badge.svg)](../../actions)
 
@@ -16,14 +16,10 @@ $ make install
 
 ```sh
 $ make start
-# open http://localhost:5000
+open http://localhost:5000
 ```
-
-[![Hexlet Ltd. logo](https://raw.githubusercontent.com/Hexlet/assets/master/images/hexlet_logo128.png)](https://ru.hexlet.io/pages/about?utm_source=github&utm_medium=link&utm_campaign=project-frontend-l4-server)
-
-This repository is created and maintained by the team and the community of Hexlet, an educational project. [Read more about Hexlet (in Russian)](https://ru.hexlet.io/pages/about?utm_source=github&utm_medium=link&utm_campaign=project-frontend-l4-server).
 
 ### Hexlet tests and linter status:
 [![Actions Status](https://github.com/mkolotovich/frontend-project-lvl4/workflows/hexlet-check/badge.svg)](https://github.com/mkolotovich/frontend-project-lvl4/actions)
-
+[![Maintainability](https://api.codeclimate.com/v1/badges/98b33595bda4c915a01f/maintainability)](https://codeclimate.com/github/mkolotovich/frontend-project-lvl4/maintainability)
 link on heroku - https://serene-beyond-92892.herokuapp.com/

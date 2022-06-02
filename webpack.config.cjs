@@ -1,5 +1,3 @@
-// @ts-check
-
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
@@ -18,7 +16,6 @@ module.exports = {
     compress: true,
     port: 8090,
     host: '0.0.0.0',
-    // publicPath: '/assets/',
     historyApiFallback: true,
   },
   plugins: [
