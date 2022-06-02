@@ -136,7 +136,7 @@ const Home = () => {
             >
               {({ isSubmitting }) => (
                 <Form>
-                  <Field name="message" placeholder={t('message')} onChange={(e) => setValue(e.target.value)} value={inputValue}/>
+                  <Field name="message" placeholder={t('message')} onChange={(e) => setValue(e.target.value)} value={inputValue} aria-label="Новое сообщение"/>
                   <ErrorMessage name="message" component="div" />
                   <button type="submit" disabled={isSubmitting}>{'->'}</button>
                 </Form>
