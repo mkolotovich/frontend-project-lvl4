@@ -86,7 +86,7 @@ const Home = () => {
       try {
         request();
       } catch(err) {
-        toast(err)
+        toast(t('networkError'))
       }
     } else {
       navigate('/login');

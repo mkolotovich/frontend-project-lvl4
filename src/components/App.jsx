@@ -65,7 +65,8 @@ i18n
           'userText' : 'Такой пользователь уже существует',
           'channelAdded' : 'Канал создан',
           'channelRenamed' : 'Канал переименован',
-          'channelRemoved' : 'Канал удалён'
+          'channelRemoved' : 'Канал удалён',
+          'networkError' : 'Ошибка соединения'
         }
       }
     },
