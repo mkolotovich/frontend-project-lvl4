@@ -16,9 +16,6 @@ const SignupSchema = (t) => Yup.object().shape({
   pass: Yup.string()
     .min(6, t('tooShort'))
     .required(t('required')),
-  passConfirm: Yup.string()
-    .min(6, t('tooShort'))
-    .required(t('required')),
 });
 
 export default () => {
@@ -37,6 +34,13 @@ export default () => {
           name: '',
           pass: '',
           passConfirm: '',
+        }}
+        validate={values => {
+          const errors = {};
+          if (values.passConfirm.length > 0 && values.pass !== values.passConfirm) {
+            errors.passConfirm = t('passText');
+          }
+          return errors;
         }}
         validationSchema={SignupSchema(t)}
         onSubmit={async (values) => {
@@ -73,7 +77,7 @@ export default () => {
             </label>
             <label>
               {t('password')}
-              <Field name="pass"/>
+              <Field name="pass" />
               <ErrorMessage name="pass" component="div" />
             </label>
             <label>
