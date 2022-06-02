@@ -22,7 +22,7 @@ export default(props) => {
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label className='visually-hidden'>Channel name</Form.Label>
+            <Form.Label className='visually-hidden'>Имя канала</Form.Label>
             <Form.Control
               type="text"
               autoFocus
