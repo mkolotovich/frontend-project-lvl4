@@ -66,12 +66,21 @@ export default () => {
       >
         {({ isSubmitting }) => (
           <Form>
-            <Field name="name" placeholder={t('name')} />
-            <ErrorMessage name="name" component="div" />
-            <Field name="pass" placeholder={t('password')}/>
-            <ErrorMessage name="pass" component="div" />
-            <Field name="passConfirm" placeholder={t('passwordConfirm')}/>
-            <ErrorMessage name="passConfirm" component="div" />
+            <label>
+              {t('name')}
+              <Field name="name"/>
+              <ErrorMessage name="name" component="div" />
+            </label>
+            <label>
+              {t('password')}
+              <Field name="pass"/>
+              <ErrorMessage name="pass" component="div" />
+            </label>
+            <label>
+              {t('passwordConfirm')}
+              <Field name="passConfirm"/>
+              <ErrorMessage name="passConfirm" component="div" />
+            </label>
             {error && <div>{errorMessage}</div>}
             <button type="submit" disabled={isSubmitting}>{t('register')}</button>
           </Form>
