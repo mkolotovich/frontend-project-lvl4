@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useTranslation } from "react-i18next";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { socket } from './App.jsx';
 
 export default(props) => {
@@ -14,6 +14,7 @@ export default(props) => {
   const error = duplicateError || lengthError ? true : false;
   const { t } = useTranslation();
   const errorMessage = duplicateError ? t('duplicateText') : t('lengthText');
+  const toastId = React.useRef(null);
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>
@@ -53,7 +54,6 @@ export default(props) => {
           </Modal.Footer>
         </Form>
       </Modal.Body>
-      {/* <ToastContainer/> */}
     </Modal>
   );
 }

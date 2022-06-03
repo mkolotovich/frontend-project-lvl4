@@ -8,7 +8,7 @@ import useAuth from '../hooks/index.jsx';
 import axios from 'axios';
 import { Dropdown } from 'react-bootstrap';
 import { useTranslation } from "react-i18next";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import filter from 'leo-profanity';
 import { getAllChannels } from '../slices/channelsSlice.js';
 import { getAllMessages } from '../slices/messagesSlice.js';
@@ -150,7 +150,6 @@ const Home = () => {
       <AddChannelModal show={show} handleClose={handleClose}/>
       <RemoveChannelModal show={showRemove} handleClose={handleCloseRemove} channel={channelRemove}/>
       <RenameChannelModal show={showRename} handleClose={handleCloseRename} channel={channelRemove}/>
-      <ToastContainer />
     </div>
   );
 }
