@@ -5,6 +5,12 @@ import { useTranslation } from "react-i18next";
 import { toast } from 'react-toastify';
 import { socket } from './App.jsx';
 
+const focusUsernameInputField = input => {
+  if (input) {
+    setTimeout(() => {input.focus()}, 100);
+  }
+};
+
 export default(props) => {
   const { show, handleClose, channel } = props;
   const [inputValue, setValue] = useState('');
@@ -34,7 +40,7 @@ export default(props) => {
             <Form.Label className='visually-hidden'>Имя канала</Form.Label>
             <Form.Control
               type="text"
-              autoFocus
+              ref={focusUsernameInputField}
               value={inputValue}
               onChange={(e) => setValue(e.target.value)}
             />
