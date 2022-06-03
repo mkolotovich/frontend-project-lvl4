@@ -108,7 +108,9 @@ const Home = () => {
               <li className='d-flex' key={channel.id}>
                 <button onClick = {(e) => channelSwitchHandler(e, allChannels, dispatch, allMessages)}># {channel.name}</button>
                 {channel.removable && <Dropdown>
-                  <Dropdown.Toggle variant="success" id="dropdown-basic"></Dropdown.Toggle>
+                  <Dropdown.Toggle variant="success" id="dropdown-basic">
+                    <span className='visually-hidden'>Управление каналом</span>
+                  </Dropdown.Toggle>
                   <Dropdown.Menu>
                     <Dropdown.Item href="#/action-1" onClick = {(e) => handleShowRemove(e)}>{t('remove')}</Dropdown.Item>
                     <Dropdown.Item href="#/action-2" onClick = {(e) => handleShowRename(e)}>{t('rename')}</Dropdown.Item>

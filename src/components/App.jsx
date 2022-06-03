@@ -14,7 +14,7 @@ import {
 import { io } from 'socket.io-client';
 import i18n from "i18next";
 import { useTranslation, initReactI18next } from "react-i18next";
-import { ErrorBoundary, RollbarContext, Provider } from '@rollbar/react';
+import { ErrorBoundary, Provider } from '@rollbar/react';
 import { sendMessage } from '../slices/messagesSlice.js';
 import { addChannel, removeChannel, renameChannel } from '../slices/channelsSlice.js';
 import { removeChannelMessages } from '../slices/messagesSlice.js';
