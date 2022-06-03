@@ -94,6 +94,7 @@ const Home = () => {
   }, []);
   const user = JSON.parse(localStorage.getItem('user'));
   const channel = allChannels.length > 0 ? allChannels.find((el) => el.id === currentChannelId) : {};
+  const channelWithHash = `# ${channel.name}`;
   return (
     <div className="container">
       <div className="row">
@@ -117,7 +118,7 @@ const Home = () => {
           </ul>
         </div>
         <div className="col">
-          <div><b># {channel.name}</b></div>
+          <div><b>{channelWithHash}</b></div>
           <div>
             {allChannelMessages.map((message) => <div className='text-break' key={message.id}>{message.username}: {message.text}</div>)}
             <Formik
