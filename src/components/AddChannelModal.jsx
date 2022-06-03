@@ -50,8 +50,8 @@ export default(props) => {
               {t('close')}
             </Button>
             <Button variant="primary" type='submit'>{t('send')}</Button>
-          {error && <div>{errorMessage}</div>}
           </Modal.Footer>
+          {error && <div>{errorMessage}</div>}
         </Form>
       </Modal.Body>
     </Modal>
