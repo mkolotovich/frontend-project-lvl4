@@ -106,9 +106,7 @@ const Home = () => {
           <ul>
             {allChannels.map((channel) => 
               <li className='d-flex' key={channel.id}>
-                <button onClick = {(e) => channelSwitchHandler(e, allChannels, dispatch, allMessages)}>
-                  <span className='me-1'>#</span>{channel.name}
-                </button>
+                <button onClick = {(e) => channelSwitchHandler(e, allChannels, dispatch, allMessages)}># {channel.name}</button>
                 {channel.removable && <Dropdown>
                   <Dropdown.Toggle variant="success" id="dropdown-basic"></Dropdown.Toggle>
                   <Dropdown.Menu>

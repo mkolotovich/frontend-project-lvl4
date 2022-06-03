@@ -20,24 +20,8 @@ export default(props) => {
         <Modal.Title>{t('addChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form>
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label className='visually-hidden'>Имя канала</Form.Label>
-            <Form.Control
-              type="text"
-              autoFocus
-              value={inputValue}
-              onChange={(e) => setValue(e.target.value)}
-            />
-          </Form.Group>
-          {error && <div>{errorMessage}</div>}
-        </Form>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          {t('close')}
-        </Button>
-        <Button variant="primary" onClick={async() => {
+        <Form onSubmit={async(e) => {
+          e.preventDefault();
           if (allChannels.some((el) => el.name === inputValue)) {
             setError(!duplicateError);
           } 
@@ -47,13 +31,28 @@ export default(props) => {
           else {
             socket.emit('newChannel', { name: inputValue }, (response) => {
               console.log(response.status); // ok
-            });
+            }) 
             toast(t('channelAdded'));
           }
         }}>
-          {t('send')}
-        </Button>
-      </Modal.Footer>
+          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+            <Form.Label className='visually-hidden'>Имя канала</Form.Label>
+            <Form.Control
+              type="text"
+              autoFocus
+              value={inputValue}
+              onChange={(e) => setValue(e.target.value)}
+            />
+          </Form.Group>
+          <Modal.Footer>
+            <Button variant="secondary" onClick={handleClose}>
+              {t('close')}
+            </Button>
+            <Button variant="primary" type='submit'>{t('send')}</Button>
+          {error && <div>{errorMessage}</div>}
+          </Modal.Footer>
+        </Form>
+      </Modal.Body>
       <ToastContainer />
     </Modal>
   );
