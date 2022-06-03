@@ -2,7 +2,7 @@ import 'core-js/stable/index.js';
 import 'regenerator-runtime/runtime.js';
 
 import '../../assets/application.scss';
-
+import { ToastContainer } from 'react-toastify';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import {
@@ -153,6 +153,7 @@ export default function App() {
           </Router>
         </ErrorBoundary>
       </Provider>
+      <ToastContainer/>
     </AuthProvider>
   );
 }

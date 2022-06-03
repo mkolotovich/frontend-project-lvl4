@@ -2,7 +2,7 @@ import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
 import { useTranslation } from "react-i18next";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import { socket } from './App.jsx';
 
 export default (props) => {
@@ -20,7 +20,8 @@ export default (props) => {
           {t('close')}
         </Button>
         <Button variant="primary" onClick={async() => {
-          const { id } = allChannels.find((el) => el.name === channel);
+          const channelWithOutHash = channel.slice(2);
+          const { id } = allChannels.find((el) => el.name === channelWithOutHash);
           console.log(id);
           socket.emit('removeChannel', {id}, (response) => {
             console.log(response.status); // ok

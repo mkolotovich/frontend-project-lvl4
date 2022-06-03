@@ -53,7 +53,7 @@ export default(props) => {
           </Modal.Footer>
         </Form>
       </Modal.Body>
-      <ToastContainer role="dialog" autoClose={8000}/>
+      {/* <ToastContainer/> */}
     </Modal>
   );
 }
