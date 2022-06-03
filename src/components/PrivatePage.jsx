@@ -117,7 +117,7 @@ const Home = () => {
           </ul>
         </div>
         <div className="col">
-          <div><b>{channel.name}</b></div>
+          <div><b># {channel.name}</b></div>
           <div>
             {allChannelMessages.map((message) => <div className='text-break' key={message.id}>{message.username}: {message.text}</div>)}
             <Formik
