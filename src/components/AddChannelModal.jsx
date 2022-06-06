@@ -8,13 +8,12 @@ import { socket } from './App.jsx';
 export default(props) => {
   const { show, handleClose } = props;
   const [inputValue, setValue] = useState('');
-  const allChannels = useSelector((state) => state.channels.value);
+  const allChannels = useSelector((state) => state.channels.channels);
   const [duplicateError, setError] = useState(false);
   const [lengthError, setLengthError] = useState(false);
   const error = duplicateError || lengthError ? true : false;
   const { t } = useTranslation();
   const errorMessage = duplicateError ? t('duplicateText') : t('lengthText');
-  const toastId = React.useRef(null);
   return (
     <Modal show={show} onHide={handleClose}>
       <Modal.Header closeButton>

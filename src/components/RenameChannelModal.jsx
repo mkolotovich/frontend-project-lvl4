@@ -5,16 +5,11 @@ import { useTranslation } from "react-i18next";
 import { toast } from 'react-toastify';
 import { socket } from './App.jsx';
 
-const focusUsernameInputField = input => {
-  if (input) {
-    setTimeout(() => {input.focus()}, 100);
-  }
-};
-
 export default(props) => {
   const { show, handleClose, channel } = props;
   const [inputValue, setValue] = useState('');
-  const allChannels = useSelector((state) => state.channels.value);
+  const allChannels = useSelector((state) => state.channels.channels);
+  const currentChannelId = useSelector((state) => state.channels.currentChannel);
   const [error, setError] = useState(false);
   const { t } = useTranslation();
   return (
@@ -24,6 +19,7 @@ export default(props) => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={async(e) => {
+          e.preventDefault();
           const channelWithOutHash = channel.slice(2);
           const { id } = allChannels.find((el) => el.name === channelWithOutHash);
           console.log(id);
@@ -33,6 +29,7 @@ export default(props) => {
             socket.emit('renameChannel', { id, name: inputValue }, (response) => {
               console.log(response.status); // ok
             });
+            console.log(currentChannelId);
             toast(t('channelRenamed'));
           }
         }}>
@@ -40,7 +37,7 @@ export default(props) => {
             <Form.Label className='visually-hidden'>Имя канала</Form.Label>
             <Form.Control
               type="text"
-              ref={focusUsernameInputField}
+              autoFocus
               value={inputValue}
               onChange={(e) => setValue(e.target.value)}
             />

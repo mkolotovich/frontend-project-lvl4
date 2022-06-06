@@ -10,9 +10,8 @@ import { Dropdown } from 'react-bootstrap';
 import { useTranslation } from "react-i18next";
 import { toast } from 'react-toastify';
 import filter from 'leo-profanity';
-import { getAllChannels } from '../slices/channelsSlice.js';
+import { getAllChannels, changeChannel } from '../slices/channelsSlice.js';
 import { getAllMessages } from '../slices/messagesSlice.js';
-import { changeChannel } from '../slices/currentChanelSlice.js';
 import AddChannelModal from './AddChannelModal.jsx';
 import RemoveChannelModal from './RemoveChannelModal.jsx';
 import RenameChannelModal from './RenameChannelModal.jsx';
@@ -31,9 +30,9 @@ const channelSwitchHandler = (e, allChannels, dispatch, allMessages) => {
 };
 
 const Home = () => {
-  const allChannels = useSelector((state) => state.channels.value);
+  const allChannels = useSelector((state) => state.channels.channels);
   const allMessages = useSelector((state) => state.messages.value);
-  const currentChannelId = useSelector((state) => state.currentChannel.value);
+  const currentChannelId = useSelector((state) => state.channels.currentChannel);
   const allChannelMessages = allMessages.filter((el) => el.channelId === currentChannelId);
   const dispatch = useDispatch();
   const navigate = useNavigate();

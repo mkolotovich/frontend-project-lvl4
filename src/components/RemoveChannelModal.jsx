@@ -7,7 +7,7 @@ import { socket } from './App.jsx';
 
 export default (props) => {
   const { show, handleClose, channel } = props;
-  const allChannels = useSelector((state) => state.channels.value);
+  const allChannels = useSelector((state) => state.channels.channels);
   const { t } = useTranslation();
   return (
     <Modal show={show} onHide={handleClose}>
@@ -19,7 +19,7 @@ export default (props) => {
         <Button variant="secondary" onClick={handleClose}>
           {t('close')}
         </Button>
-        <Button variant="primary" onClick={async() => {
+        <Button variant="danger" onClick={async() => {
           const channelWithOutHash = channel.slice(2);
           const { id } = allChannels.find((el) => el.name === channelWithOutHash);
           console.log(id);
