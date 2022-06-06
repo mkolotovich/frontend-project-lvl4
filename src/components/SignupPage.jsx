@@ -5,20 +5,20 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import useAuth from '../hooks/index.jsx';
 
 const SignupSchema = (t) => Yup.object().shape({
   name: Yup.string()
     .min(3, t('lengthText'))
     .max(20, t('lengthText'))
-    .required(t('required')),  
+    .required(t('required')),
   pass: Yup.string()
     .min(6, t('tooShort'))
     .required(t('required')),
 });
 
-export default () => {
+export default function SignupPage() {
   const navigate = useNavigate();
   const [userError, setUserError] = useState(false);
   const { t } = useTranslation();
@@ -32,7 +32,7 @@ export default () => {
           pass: '',
           passConfirm: '',
         }}
-        validate={values => {
+        validate={(values) => {
           const errors = {};
           if (values.passConfirm.length > 0 && values.pass !== values.passConfirm) {
             errors.passConfirm = t('passText');
@@ -43,38 +43,37 @@ export default () => {
         onSubmit={async (values) => {
           console.log(values);
           const { name, pass } = values;
-            try {
-              const { data } = await axios.post('/api/v1/signup', { username: name, password: pass });
-              console.log(data);
-              const { token, username } = data;
-              logIn();
-              console.log(username);
-              const user = {userId: token, user: username};
-              console.log(user);
-              localStorage.setItem('user', JSON.stringify(user));
-              navigate('/');
-            } catch (err) {
-              console.log(err);
-              setUserError(!userError);
-              console.log(sign.value);
-            }
+          try {
+            const { data } = await axios.post('/api/v1/signup', { username: name, password: pass });
+            console.log(data);
+            const { token, username } = data;
+            logIn();
+            console.log(username);
+            const user = { userId: token, user: username };
+            console.log(user);
+            localStorage.setItem('user', JSON.stringify(user));
+            navigate('/');
+          } catch (err) {
+            console.log(err);
+            setUserError(!userError);
+          }
         }}
       >
         {({ isSubmitting }) => (
           <Form>
-            <label>
+            <label htmlFor="nick">
               {t('name')}
-              <Field name="name"/>
+              <Field name="name" id="nick" />
               <ErrorMessage name="name" component="div" />
             </label>
-            <label>
+            <label htmlFor="password">
               {t('password')}
-              <Field name="pass" />
+              <Field name="pass" id="password" />
               <ErrorMessage name="pass" component="div" />
             </label>
-            <label>
+            <label htmlFor="passwordConfirm">
               {t('passwordConfirm')}
-              <Field name="passConfirm"/>
+              <Field name="passConfirm" id="passwordConfirm" />
               <ErrorMessage name="passConfirm" component="div" />
             </label>
             {userError && <div>{t('userText')}</div>}

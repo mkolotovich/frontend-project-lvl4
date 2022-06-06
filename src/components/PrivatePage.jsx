@@ -4,22 +4,21 @@ import { useNavigate } from 'react-router-dom';
 import {
   Formik, Form, Field, ErrorMessage,
 } from 'formik';
-import useAuth from '../hooks/index.jsx';
 import axios from 'axios';
 import { Dropdown } from 'react-bootstrap';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import filter from 'leo-profanity';
+import useAuth from '../hooks/index.jsx';
 import { getAllChannels, changeChannel } from '../slices/channelsSlice.js';
 import { getAllMessages } from '../slices/messagesSlice.js';
 import AddChannelModal from './AddChannelModal.jsx';
 import RemoveChannelModal from './RemoveChannelModal.jsx';
 import RenameChannelModal from './RenameChannelModal.jsx';
-import { socket } from './App.jsx';
 
 const channelSwitchHandler = (e, allChannels, dispatch, allMessages) => {
-  const target = e.target;
-  const currentChannelName = target.textContent;
+  const { currentTarget } = e;
+  const currentChannelName = currentTarget.textContent;
   const channelWithOutHash = currentChannelName.slice(2);
   const currentChannel = allChannels.find((el) => el.name === channelWithOutHash);
   const currentChannelId = currentChannel.id;
@@ -29,7 +28,7 @@ const channelSwitchHandler = (e, allChannels, dispatch, allMessages) => {
   console.log(channeltMessages);
 };
 
-const Home = () => {
+function Home() {
   const allChannels = useSelector((state) => state.channels.channels);
   const allMessages = useSelector((state) => state.messages.value);
   const currentChannelId = useSelector((state) => state.channels.currentChannel);
@@ -67,6 +66,7 @@ const Home = () => {
     console.log(channelRemove);
     setShowRename(true);
   };
+  const user = JSON.parse(localStorage.getItem('user'));
   useEffect(() => {
     const request = async () => {
       const token = user.userId;
@@ -78,59 +78,70 @@ const Home = () => {
       dispatch(getAllChannels(channels));
       console.log('allMessages', messages);
       dispatch(getAllMessages(messages));
-      const channeltMessages = messages.filter((el) => el.channel === currentChannelId);
-      console.log(channeltMessages);
       auth.logIn();
     };
     if (localStorage.getItem('user')) {
       try {
         request();
-      } catch(err) {
-        toast(t('networkError'))
+      } catch (err) {
+        toast(t('networkError'));
       }
     } else {
       navigate('/login');
     }
   }, []);
-  const user = JSON.parse(localStorage.getItem('user'));
-  const channel = allChannels.length > 0 ? allChannels.find((el) => el.id === currentChannelId) : {};
-  const channelWithHash = `# ${channel.name}`;
   return (
     <div className="container">
       <div className="row">
         <div className="col">
-          <div>{t('channels')}
-            <button onClick = {handleShow}>+</button>
+          <div>
+            {t('channels')}
+            <button onClick={handleShow} type="button">+</button>
           </div>
           <ul>
-            {allChannels.map((channel) => 
-              <li className='d-flex' key={channel.id}>
-                <button onClick = {(e) => channelSwitchHandler(e, allChannels, dispatch, allMessages)}># {channel.name}</button>
-                {channel.removable && <Dropdown>
+            {allChannels.map((channel) => (
+              <li className="d-flex" key={channel.id}>
+                <button
+                  type="button"
+                  onClick={(e) => channelSwitchHandler(e, allChannels, dispatch, allMessages)}
+                >
+                  <span># </span>
+                  {channel.name}
+                </button>
+                {channel.removable && (
+                <Dropdown>
                   <Dropdown.Toggle variant="success" id="dropdown-basic">
-                    <span className='visually-hidden'>Управление каналом</span>
+                    <span className="visually-hidden">Управление каналом</span>
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1" onClick = {(e) => handleShowRemove(e)}>{t('remove')}</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2" onClick = {(e) => handleShowRename(e)}>{t('rename')}</Dropdown.Item>
+                    <Dropdown.Item href="#/action-1" onClick={(e) => handleShowRemove(e)}>{t('remove')}</Dropdown.Item>
+                    <Dropdown.Item href="#/action-2" onClick={(e) => handleShowRename(e)}>{t('rename')}</Dropdown.Item>
                   </Dropdown.Menu>
-                </Dropdown>}
-              </li>)
-            }
+                </Dropdown>
+                )}
+              </li>
+            ))}
           </ul>
         </div>
         <div className="col">
-          <div><b>{channelWithHash}</b></div>
+          <div><b>{allChannels.length > 0 && `# ${allChannels.find((el) => el.id === currentChannelId).name}`}</b></div>
           <div>
-            {allChannelMessages.map((message) => <div className='text-break' key={message.id}>{message.username}: {message.text}</div>)}
+            {allChannelMessages.map((message) => (
+              <div className="text-break" key={message.id}>
+                {message.username}
+                :
+                {' '}
+                {message.text}
+              </div>
+            ))}
             <Formik
               initialValues={{
                 message: '',
               }}
-              onSubmit={async(values) => {
+              onSubmit={async (values) => {
                 console.log(values);
                 if (inputValue !== '') {
-                  socket.emit('newMessage', { text: filter.clean(inputValue), channelId: currentChannelId, username: user.user }, (response) => {
+                  auth.socket.emit('newMessage', { text: filter.clean(inputValue), channelId: currentChannelId, username: user.user }, (response) => {
                     console.log(response.status); // ok
                   });
                   setValue('');
@@ -139,7 +150,7 @@ const Home = () => {
             >
               {({ isSubmitting }) => (
                 <Form>
-                  <Field name="message" placeholder={t('message')} onChange={(e) => setValue(e.target.value)} value={inputValue} aria-label="Новое сообщение"/>
+                  <Field name="message" placeholder={t('message')} onChange={(e) => setValue(e.target.value)} value={inputValue} aria-label="Новое сообщение" />
                   <ErrorMessage name="message" component="div" />
                   <button type="submit" disabled={isSubmitting}>{'->'}</button>
                 </Form>
@@ -148,9 +159,9 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <AddChannelModal show={show} handleClose={handleClose}/>
-      <RemoveChannelModal show={showRemove} handleClose={handleCloseRemove} channel={channelRemove}/>
-      <RenameChannelModal show={showRename} handleClose={handleCloseRename} channel={channelRemove}/>
+      <AddChannelModal show={show} handleClose={handleClose} />
+      <RemoveChannelModal show={showRemove} handle={handleCloseRemove} channel={channelRemove} />
+      <RenameChannelModal show={showRename} handle={handleCloseRename} channel={channelRemove} />
     </div>
   );
 }

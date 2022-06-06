@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form } from 'react-bootstrap';
 import { useSelector } from 'react-redux';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
-import { socket } from './App.jsx';
+import useAuth from '../hooks/index.jsx';
 
-export default(props) => {
-  const { show, handleClose, channel } = props;
+export default function RenameChannelModal(props) {
+  const auth = useAuth();
+  const { show, handle, channel } = props;
   const [inputValue, setValue] = useState('');
   const allChannels = useSelector((state) => state.channels.channels);
   const currentChannelId = useSelector((state) => state.channels.currentChannel);
   const [error, setError] = useState(false);
   const { t } = useTranslation();
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handle}>
       <Modal.Header closeButton>
         <Modal.Title>{t('renameChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={async(e) => {
+        <Form onSubmit={async (e) => {
           e.preventDefault();
           const channelWithOutHash = channel.slice(2);
           const { id } = allChannels.find((el) => el.name === channelWithOutHash);
@@ -26,15 +27,16 @@ export default(props) => {
           if (allChannels.some((el) => el.name === inputValue)) {
             setError(!error);
           } else {
-            socket.emit('renameChannel', { id, name: inputValue }, (response) => {
+            auth.socket.emit('renameChannel', { id, name: inputValue }, (response) => {
               console.log(response.status); // ok
             });
             console.log(currentChannelId);
             toast(t('channelRenamed'));
           }
-        }}>
+        }}
+        >
           <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
-            <Form.Label className='visually-hidden'>Имя канала</Form.Label>
+            <Form.Label className="visually-hidden">Имя канала</Form.Label>
             <Form.Control
               type="text"
               autoFocus
@@ -43,10 +45,10 @@ export default(props) => {
             />
           </Form.Group>
           <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+            <Button variant="secondary" onClick={handle}>
               {t('close')}
             </Button>
-            <Button variant="primary" type='submit'>{t('send')}</Button>
+            <Button variant="primary" type="submit">{t('send')}</Button>
           </Modal.Footer>
           {error && <div>{t('duplicateText')}</div>}
         </Form>

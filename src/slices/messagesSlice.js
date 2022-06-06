@@ -9,15 +9,17 @@ const counterSlice = createSlice({
   initialState,
   reducers: {
     getAllMessages: (state, action) => {
-      state.value = action.payload;
+      const newState = state;
+      newState.value = action.payload;
     },
     sendMessage: (state, action) => {
       state.value.push(action.payload);
     },
     removeChannelMessages: (state, action) => {
+      const newState = state;
       const { id } = action.payload;
       const filteredMessages = state.value.filter((el) => el.channelId !== id);
-      state.value = filteredMessages;
+      newState.value = filteredMessages;
     },
   },
 });

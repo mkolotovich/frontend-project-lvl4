@@ -5,7 +5,7 @@ import {
 } from 'formik';
 import * as Yup from 'yup';
 import axios from 'axios';
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
 import useAuth from '../hooks/index.jsx';
 
 const SignupSchema = (t) => Yup.object().shape({
@@ -16,7 +16,7 @@ const SignupSchema = (t) => Yup.object().shape({
   pass: Yup.string()
     .required(t('required')),
 });
-  
+
 function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
@@ -40,27 +40,26 @@ function Login() {
             const { token, username } = data;
             logIn();
             console.log(username);
-            const user = {userId: token, user: username};
+            const user = { userId: token, user: username };
             console.log(user);
             localStorage.setItem('user', JSON.stringify(user));
             navigate('/');
           } catch (err) {
             console.log(err);
             setError(!error);
-            console.log(sign.value);
           }
         }}
       >
         {({ isSubmitting }) => (
           <Form>
-            <label>
+            <label htmlFor="nick">
               {t('nick')}
-              <Field name="name"/>
+              <Field name="name" id="nick" />
               <ErrorMessage name="name" component="div" />
             </label>
-            <label>
+            <label htmlFor="password">
               {t('password')}
-              <Field name="pass"/>
+              <Field name="pass" id="password" />
               <ErrorMessage name="pass" component="div" />
             </label>
             {error && <div>{t('authorizationText')}</div>}
@@ -68,7 +67,7 @@ function Login() {
           </Form>
         )}
       </Formik>
-      <a href='/signup'>{t('registration')}</a>
+      <a href="/signup">{t('registration')}</a>
     </div>
   );
 }
