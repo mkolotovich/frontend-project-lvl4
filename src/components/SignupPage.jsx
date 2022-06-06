@@ -41,20 +41,15 @@ export default function SignupPage() {
         }}
         validationSchema={SignupSchema(t)}
         onSubmit={async (values) => {
-          console.log(values);
           const { name, pass } = values;
           try {
             const { data } = await axios.post('/api/v1/signup', { username: name, password: pass });
-            console.log(data);
             const { token, username } = data;
             logIn();
-            console.log(username);
             const user = { userId: token, user: username };
-            console.log(user);
             localStorage.setItem('user', JSON.stringify(user));
             navigate('/');
           } catch (err) {
-            console.log(err);
             setUserError(!userError);
           }
         }}

@@ -112,23 +112,19 @@ export default function App() {
   const defaultChannelId = 1;
   const socket = io();
   socket.on('newMessage', async (data) => {
-    console.log('data', data);
     dispatch(sendMessage(data));
   });
   socket.on('newChannel', async (data) => {
-    console.log('data', data);
     const { id } = data;
     dispatch(addChannel(data));
     dispatch(changeChannel(id));
   });
   socket.on('removeChannel', async (data) => {
-    console.log('data', data);
     dispatch(changeChannel(defaultChannelId));
     dispatch(removeChannel(data));
     dispatch(removeChannelMessages(data));
   });
   socket.on('renameChannel', async (data) => {
-    console.log('data', data);
     dispatch(renameChannel(data));
   });
   return (

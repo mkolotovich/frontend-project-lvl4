@@ -10,7 +10,6 @@ export default function RenameChannelModal(props) {
   const { show, handle, channel } = props;
   const [inputValue, setValue] = useState('');
   const allChannels = useSelector((state) => state.channels.channels);
-  const currentChannelId = useSelector((state) => state.channels.currentChannel);
   const [error, setError] = useState(false);
   const { t } = useTranslation();
   return (
@@ -23,14 +22,14 @@ export default function RenameChannelModal(props) {
           e.preventDefault();
           const channelWithOutHash = channel.slice(2);
           const { id } = allChannels.find((el) => el.name === channelWithOutHash);
-          console.log(id);
           if (allChannels.some((el) => el.name === inputValue)) {
             setError(!error);
           } else {
             auth.socket.emit('renameChannel', { id, name: inputValue }, (response) => {
-              console.log(response.status); // ok
+              if (response.status !== 'ok') {
+                toast(t('networkError'));
+              }
             });
-            console.log(currentChannelId);
             toast(t('channelRenamed'));
           }
         }}

@@ -25,9 +25,10 @@ export default function RemoveChannelModal(props) {
           onClick={async () => {
             const channelWithOutHash = channel.slice(2);
             const { id } = allChannels.find((el) => el.name === channelWithOutHash);
-            console.log(id);
             auth.socket.emit('removeChannel', { id }, (response) => {
-              console.log(response.status); // ok
+              if (response.status !== 'ok') {
+                toast(t('networkError'));
+              }
             });
             toast(t('channelRemoved'));
           }}

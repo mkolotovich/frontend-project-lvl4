@@ -16,16 +16,13 @@ import AddChannelModal from './AddChannelModal.jsx';
 import RemoveChannelModal from './RemoveChannelModal.jsx';
 import RenameChannelModal from './RenameChannelModal.jsx';
 
-const channelSwitchHandler = (e, allChannels, dispatch, allMessages) => {
+const channelSwitchHandler = (e, allChannels, dispatch) => {
   const { currentTarget } = e;
   const currentChannelName = currentTarget.textContent;
   const channelWithOutHash = currentChannelName.slice(2);
   const currentChannel = allChannels.find((el) => el.name === channelWithOutHash);
   const currentChannelId = currentChannel.id;
-  console.log(currentChannelId);
   dispatch(changeChannel(currentChannelId));
-  const channeltMessages = allMessages.filter((el) => el.channel === currentChannelId);
-  console.log(channeltMessages);
 };
 
 function Home() {
@@ -51,9 +48,7 @@ function Home() {
     const eventTarget = e.target;
     const parent = eventTarget.closest('.d-flex');
     const target = parent.querySelector('button');
-    console.log(target.textContent);
     setChannel(target.textContent);
-    console.log(channelRemove);
     setShowRemove(true);
   };
   const handleShowRename = (e) => {
@@ -61,22 +56,16 @@ function Home() {
     const eventTarget = e.target;
     const parent = eventTarget.closest('.d-flex');
     const target = parent.querySelector('button');
-    console.log(target.textContent);
     setChannel(target.textContent);
-    console.log(channelRemove);
     setShowRename(true);
   };
   const user = JSON.parse(localStorage.getItem('user'));
   useEffect(() => {
     const request = async () => {
       const token = user.userId;
-      console.log(token);
       const { data: userData } = await axios.get('/api/v1/data', { headers: { Authorization: `Bearer ${token}` } });
-      console.log(userData);
       const { channels, messages } = userData;
-      console.log(channels);
       dispatch(getAllChannels(channels));
-      console.log('allMessages', messages);
       dispatch(getAllMessages(messages));
       auth.logIn();
     };
@@ -138,11 +127,12 @@ function Home() {
               initialValues={{
                 message: '',
               }}
-              onSubmit={async (values) => {
-                console.log(values);
+              onSubmit={async () => {
                 if (inputValue !== '') {
                   auth.socket.emit('newMessage', { text: filter.clean(inputValue), channelId: currentChannelId, username: user.user }, (response) => {
-                    console.log(response.status); // ok
+                    if (response.status !== 'ok') {
+                      toast(t('networkError'));
+                    }
                   });
                   setValue('');
                 }

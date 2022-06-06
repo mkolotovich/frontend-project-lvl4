@@ -29,7 +29,9 @@ export default function AddChannelModal(props) {
             setLengthError(!lengthError);
           } else {
             auth.socket.emit('newChannel', { name: inputValue }, (response) => {
-              console.log(response.status); // ok
+              if (response.status !== 'ok') {
+                toast(t('networkError'));
+              }
             });
             toast(t('channelAdded'));
           }
