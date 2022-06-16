@@ -7,6 +7,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { Button } from 'react-bootstrap';
 import useAuth from '../hooks/index.jsx';
+import routes from '../routes.js';
 
 export default function AuthButton() {
   const auth = useAuth();
@@ -24,6 +25,6 @@ export default function AuthButton() {
           {t('logOut')}
         </Button>
       )
-      : <Button as={Link} to="/login" state={{ from: location }}>{t('logIn')}</Button>
+      : <Button as={Link} to={routes.logInPath()} state={{ from: location }}>{t('logIn')}</Button>
   );
 }

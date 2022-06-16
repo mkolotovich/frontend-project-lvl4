@@ -13,10 +13,11 @@ export default function AddChannelModal(props) {
   const [duplicateError, setError] = useState(false);
   const [lengthError, setLengthError] = useState(false);
   const error = !!(duplicateError || lengthError);
+  const errorClass = error === true ? 'is-invalid' : '';
   const { t } = useTranslation();
   const errorMessage = duplicateError ? t('duplicateText') : t('lengthText');
   return (
-    <Modal show={show} onHide={handleClose}>
+    <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
         <Modal.Title>{t('addChannel')}</Modal.Title>
       </Modal.Header>
@@ -37,22 +38,23 @@ export default function AddChannelModal(props) {
           }
         }}
         >
-          <Form.Group className="mb-3" controlId="exampleForm.ControlInput1">
+          <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
             <Form.Label className="visually-hidden">Имя канала</Form.Label>
             <Form.Control
               type="text"
               autoFocus
+              className={errorClass}
               value={inputValue}
               onChange={(e) => setValue(e.target.value)}
             />
+            {error && <div className="invalid-feedback">{errorMessage}</div>}
           </Form.Group>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={handleClose}>
+          <div className="d-flex justify-content-end">
+            <Button className="me-2" variant="secondary" onClick={handleClose}>
               {t('close')}
             </Button>
             <Button variant="primary" type="submit">{t('send')}</Button>
-          </Modal.Footer>
-          {error && <div>{errorMessage}</div>}
+          </div>
         </Form>
       </Modal.Body>
     </Modal>

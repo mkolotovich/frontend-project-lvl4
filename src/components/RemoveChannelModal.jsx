@@ -1,41 +1,39 @@
 import React from 'react';
 import { Modal, Button } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import useAuth from '../hooks/index.jsx';
 
 export default function RemoveChannelModal(props) {
   const auth = useAuth();
-  const { show, handle, channel } = props;
-  const allChannels = useSelector((state) => state.channels.channels);
+  const { show, handle, id } = props;
   const { t } = useTranslation();
   return (
-    <Modal show={show} onHide={handle}>
+    <Modal show={show} onHide={handle} centered>
       <Modal.Header closeButton>
         <Modal.Title>{t('removeChannel')}</Modal.Title>
       </Modal.Header>
-      <Modal.Body>{t('sure')}</Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handle}>
-          {t('close')}
-        </Button>
-        <Button
-          variant="danger"
-          onClick={async () => {
-            const channelWithOutHash = channel.slice(2);
-            const { id } = allChannels.find((el) => el.name === channelWithOutHash);
-            auth.socket.emit('removeChannel', { id }, (response) => {
-              if (response.status !== 'ok') {
-                toast(t('networkError'));
-              }
-            });
-            toast(t('channelRemoved'));
-          }}
-        >
-          {t('remove')}
-        </Button>
-      </Modal.Footer>
+      <Modal.Body>
+        {t('sure')}
+        <div className="d-flex justify-content-end">
+          <Button className="me-2" variant="secondary" onClick={handle}>
+            {t('close')}
+          </Button>
+          <Button
+            variant="danger"
+            onClick={async () => {
+              auth.socket.emit('removeChannel', { id }, (response) => {
+                if (response.status !== 'ok') {
+                  toast(t('networkError'));
+                }
+              });
+              toast(t('channelRemoved'));
+            }}
+          >
+            {t('remove')}
+          </Button>
+        </div>
+      </Modal.Body>
     </Modal>
   );
 }
