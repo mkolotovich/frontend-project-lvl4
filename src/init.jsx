@@ -10,7 +10,7 @@ import {
 } from './slices/channelsSlice.js';
 import App from './components/App.jsx';
 
-export default function init() {
+export default function Init() {
   const i18nextInstance = i18n.createInstance();
   i18nextInstance
     .use(initReactI18next)
