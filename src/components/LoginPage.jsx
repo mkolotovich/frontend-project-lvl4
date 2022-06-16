@@ -21,7 +21,7 @@ const SignupSchema = () => Yup.object().shape({
 function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
-  const { logIn } = useAuth();
+  const { logIn, getUser } = useAuth();
   const errorClass = error === true ? 'is-invalid form-control' : 'form-control';
   const { t } = useTranslation();
   return (
@@ -48,6 +48,7 @@ function Login() {
                     logIn();
                     const user = { userId: token, user: username };
                     localStorage.setItem('user', JSON.stringify(user));
+                    getUser();
                     navigate(routes.rootPath());
                   } catch (err) {
                     setError(!error);

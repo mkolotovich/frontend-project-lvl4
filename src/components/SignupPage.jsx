@@ -72,12 +72,12 @@ export default function SignupPage() {
                       {!isValid && <div className="invalid-tooltip">{t(errors.name)}</div> }
                     </div>
                     <div className="form-floating mb-3">
-                      <Field className={errorClass(isValid)} name="pass" id="password" placeholder={t('password')} />
+                      <Field className={errorClass(isValid)} name="pass" id="password" placeholder={t('password')} type="password" />
                       <label htmlFor="password">{t('password')}</label>
                       {!isValid && <div className="invalid-tooltip">{t(errors.pass)}</div> }
                     </div>
                     <div className="form-floating mb-4">
-                      <Field className={errorClass(isValid)} name="passConfirm" id="passwordConfirm" placeholder={t('passwordConfirm')} />
+                      <Field className={errorClass(isValid)} name="passConfirm" id="passwordConfirm" placeholder={t('passwordConfirm')} type="password" />
                       <label htmlFor="passwordConfirm">{t('passwordConfirm')}</label>
                       {!isValid && <div className="invalid-tooltip">{t(errors.passConfirm)}</div> }
                       {userError && <div className="invalid-tooltip">{t('userText')}</div>}
