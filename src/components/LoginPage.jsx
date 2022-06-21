@@ -21,7 +21,7 @@ const SignupSchema = () => Yup.object().shape({
 function Login() {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
-  const { logIn, getUser } = useAuth();
+  const { logIn } = useAuth();
   const errorClass = error === true ? 'is-invalid form-control' : 'form-control';
   const { t } = useTranslation();
   return (
@@ -31,7 +31,7 @@ function Login() {
           <div className="card shadow-sm">
             <div className="p-5 row">
               <div className="col-md-6 d-flex d-flex justify-content-center align-items-center">
-                <img className="rounded-circle" src="http://kolotovich-hexlet-messenger.surge.sh/images/avatar_3.jpg" alt="Войти" />
+                <img className="rounded-circle" src="http://kolotovich-hexlet-messenger.surge.sh/images/avatar_3.jpg" alt={t('logIn')} />
               </div>
               <Formik
                 initialValues={{
@@ -45,10 +45,7 @@ function Login() {
                   try {
                     const { data } = await axios.post(routes.loginDataPath(), userData);
                     const { token, username } = data;
-                    logIn();
-                    const user = { userId: token, user: username };
-                    localStorage.setItem('user', JSON.stringify(user));
-                    getUser();
+                    logIn(token, username);
                     navigate(routes.rootPath());
                   } catch (err) {
                     setError(!error);
@@ -76,7 +73,8 @@ function Login() {
             </div>
             <div className="card-footer p-4">
               <div className="text-center">
-                <span>Нет аккаунта? </span>
+                <span>{t('noAccount')}</span>
+                {' '}
                 <a href="/signup">{t('registration')}</a>
               </div>
             </div>

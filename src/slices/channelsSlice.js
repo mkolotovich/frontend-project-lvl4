@@ -6,8 +6,8 @@ const initialState = {
   currentChannel: 1,
 };
 
-const counterSlice = createSlice({
-  name: 'counter',
+const channelSlice = createSlice({
+  name: 'channels',
   initialState,
   reducers: {
     getAllChannels: (state, action) => {
@@ -30,18 +30,18 @@ const counterSlice = createSlice({
     renameChannel: (state, action) => {
       const newState = state;
       const channel = action.payload;
-      const updatedTodosArray = produce(state.channels, (draft) => {
+      const updatedChannelArray = produce(state.channels, (draft) => {
         const newDraft = draft;
         const index = draft.findIndex((todo) => todo.id === channel.id);
         if (index !== -1) newDraft[index].name = channel.name;
       });
-      newState.channels = updatedTodosArray;
+      newState.channels = updatedChannelArray;
     },
   },
 });
 
 export const {
   getAllChannels, addChannel, removeChannel, renameChannel, changeChannel,
-} = counterSlice.actions;
+} = channelSlice.actions;
 
-export default counterSlice.reducer;
+export default channelSlice.reducer;

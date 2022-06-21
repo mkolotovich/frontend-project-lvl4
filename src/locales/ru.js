@@ -31,5 +31,11 @@ export default {
     channelRenamed: 'Канал переименован',
     channelRemoved: 'Канал удалён',
     networkError: 'Ошибка соединения',
+    butYouCanGo: 'Но вы можете перейти',
+    toMainPage: 'на главную страницу',
+    noAccount: 'Нет аккаунта?',
+    channelManagment: 'Управление каналом',
+    newMessage: 'Новое сообщение',
+    channelName: 'Имя канала',
   },
 };

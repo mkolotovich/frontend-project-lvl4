@@ -8,9 +8,9 @@ export default function NotFoundPage() {
     <div className="text-center">
       <h1 className="h4 text-muted">{t('notFound')}</h1>
       <p className="text-muted">
-        Но вы можете перейти
+        {t('butYouCanGo')}
         {' '}
-        <a href={routes.rootPath()}>на главную страницу</a>
+        <a href={routes.rootPath()}>{t('toMainPage')}</a>
       </p>
     </div>
   );

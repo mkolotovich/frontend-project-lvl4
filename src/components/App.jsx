@@ -35,10 +35,14 @@ const rollbarConfig = {
 
 function AuthProvider({ children, socket }) {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('user')));
-  const getUser = () => setUser(JSON.parse(localStorage.getItem('user')));
   const value = !!localStorage.getItem('user');
   const [loggedIn, setLoggedIn] = useState(value);
-  const logIn = () => setLoggedIn(true);
+  const logIn = (token, username) => {
+    const userInfo = { userId: token, user: username };
+    localStorage.setItem('user', JSON.stringify(userInfo));
+    setUser(JSON.parse(localStorage.getItem('user')));
+    setLoggedIn(true);
+  };
   const logOut = () => {
     localStorage.removeItem('user');
     setLoggedIn(false);
@@ -46,7 +50,7 @@ function AuthProvider({ children, socket }) {
 
   return (
     <AuthContext.Provider value={{
-      loggedIn, logIn, logOut, socket, user, getUser,
+      loggedIn, logIn, logOut, socket, user,
     }}
     >
       {children}

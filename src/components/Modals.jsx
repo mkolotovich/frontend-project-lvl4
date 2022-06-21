@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { changeChannel } from '../slices/channelsSlice.js';
 import Home from './PrivatePage.jsx';
+import { setModalHide, setModalActive } from '../slices/modalsSlice.js';
 
 const channelSwitchHandler = (id, allChannels, dispatch) => {
   const currentChannel = allChannels.find((el) => el.id === id);
@@ -10,37 +12,26 @@ const channelSwitchHandler = (id, allChannels, dispatch) => {
 
 export default function Modals() {
   const [channelId, setChannelId] = useState('');
-  const [show, setShow] = useState(false);
-  const [showRemove, setShowRemove] = useState(false);
-  const [showRename, setShowRename] = useState(false);
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
-  const handleCloseRemove = () => setShowRemove(false);
-  const handleCloseRename = () => setShowRename(false);
-  const handleShowRemove = (e, id, allChannels) => {
-    e.preventDefault();
-    const channel = allChannels.find((el) => el.id === id);
-    setChannelId(channel.id);
-    setShowRemove(true);
+  const [channelName, setChannelName] = useState('');
+  const dispatch = useDispatch();
+  const handleClose = (id) => {
+    const clojure = () => dispatch(setModalHide(id));
+    return clojure;
   };
-  const handleShowRename = (e, id, allChannels) => {
-    e.preventDefault();
-    const channel = allChannels.find((el) => el.id === id);
-    setChannelId(channel.id);
-    setShowRename(true);
+  const handleShow = (evt, modalId, id, allChannels) => {
+    const clojure = () => {
+      evt.preventDefault();
+      if (modalId !== 0) {
+        const channel = allChannels.find((el) => el.id === id);
+        setChannelId(channel.id);
+        setChannelName(channel.name);
+      }
+      dispatch(setModalActive(modalId));
+    };
+    return clojure();
   };
   const params = {
-    channelId,
-    show,
-    showRemove,
-    showRename,
-    handleClose,
-    handleCloseRemove,
-    handleCloseRename,
-    handleShow,
-    handleShowRemove,
-    handleShowRename,
-    channelSwitchHandler,
+    channelSwitchHandler, handleClose, handleShow, channelId, channelName,
   };
   return <Home params={params} />;
 }

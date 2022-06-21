@@ -32,7 +32,7 @@ export default function SignupPage() {
           <div className="card shadow-sm">
             <div className="p-5 justify-content-around d-flex align-items-center">
               <div>
-                <img className="rounded-circle" src="http://kolotovich-hexlet-messenger.surge.sh/images/avatar_1.jpg" alt="Регистрация" />
+                <img className="rounded-circle" src="http://kolotovich-hexlet-messenger.surge.sh/images/avatar_1.jpg" alt={t('registration')} />
               </div>
               <Formik
                 initialValues={{
@@ -54,9 +54,7 @@ export default function SignupPage() {
                   try {
                     const { data } = await axios.post(routes.signUpDataPath(), userData);
                     const { token, username } = data;
-                    logIn();
-                    const user = { userId: token, user: username };
-                    localStorage.setItem('user', JSON.stringify(user));
+                    logIn(token, username);
                     navigate(routes.rootPath());
                   } catch (err) {
                     setUserError(!userError);

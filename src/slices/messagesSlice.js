@@ -1,29 +1,29 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  value: [],
+  messages: [],
 };
 
-const counterSlice = createSlice({
-  name: 'counter',
+const messagesSlice = createSlice({
+  name: 'messages',
   initialState,
   reducers: {
     getAllMessages: (state, action) => {
       const newState = state;
-      newState.value = action.payload;
+      newState.messages = action.payload;
     },
     sendMessage: (state, action) => {
-      state.value.push(action.payload);
+      state.messages.push(action.payload);
     },
     removeChannelMessages: (state, action) => {
       const newState = state;
       const { id } = action.payload;
-      const filteredMessages = state.value.filter((el) => el.channelId !== id);
-      newState.value = filteredMessages;
+      const filteredMessages = state.messages.filter((el) => el.channelId !== id);
+      newState.messages = filteredMessages;
     },
   },
 });
 
-export const { getAllMessages, sendMessage, removeChannelMessages } = counterSlice.actions;
+export const { getAllMessages, sendMessage, removeChannelMessages } = messagesSlice.actions;
 
-export default counterSlice.reducer;
+export default messagesSlice.reducer;

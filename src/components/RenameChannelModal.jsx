@@ -7,20 +7,23 @@ import useAuth from '../hooks/index.jsx';
 
 export default function RenameChannelModal(props) {
   const auth = useAuth();
-  const { show, handle, id } = props;
+  const {
+    modal, handle, id, name,
+  } = props;
+  const { show, id: modalId } = modal;
   const [inputValue, setValue] = useState('');
   const allChannels = useSelector((state) => state.channels.channels);
   const [error, setError] = useState(false);
   const errorClass = error === true ? 'is-invalid' : '';
   const { t } = useTranslation();
   return (
-    <Modal show={show} onHide={handle} centered>
+    <Modal show={show} onHide={handle(modalId)} centered>
       <Modal.Header closeButton>
         <Modal.Title>{t('renameChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={async (e) => {
-          e.preventDefault();
+        <Form onSubmit={async (evt) => {
+          evt.preventDefault();
           if (allChannels.some((el) => el.name === inputValue)) {
             setError(!error);
           } else {
@@ -30,24 +33,18 @@ export default function RenameChannelModal(props) {
               }
             });
             toast(t('channelRenamed'));
+            handle(modalId)();
+            setValue('');
           }
         }}
         >
           <Form.Group className="mb-2" controlId="exampleForm.ControlInput1">
-            <Form.Label className="visually-hidden">Имя канала</Form.Label>
-            <Form.Control
-              type="text"
-              autoFocus
-              className={errorClass}
-              value={inputValue}
-              onChange={(e) => setValue(e.target.value)}
-            />
+            <Form.Label className="visually-hidden">{t('channelName')}</Form.Label>
+            <Form.Control type="text" autoFocus className={errorClass} value={inputValue === '' ? name : inputValue} onChange={(evt) => setValue(evt.target.value)} />
             {error && <div className="invalid-feedback">{t('duplicateText')}</div>}
           </Form.Group>
           <div className="d-flex justify-content-end">
-            <Button className="me-2" variant="secondary" onClick={handle}>
-              {t('close')}
-            </Button>
+            <Button className="me-2" variant="secondary" onClick={handle(modalId)}>{t('close')}</Button>
             <Button variant="primary" type="submit">{t('send')}</Button>
           </div>
         </Form>
