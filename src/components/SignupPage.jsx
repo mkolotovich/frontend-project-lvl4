@@ -35,11 +35,7 @@ export default function SignupPage() {
                 <img className="rounded-circle" src="http://kolotovich-hexlet-messenger.surge.sh/images/avatar_1.jpg" alt={t('registration')} />
               </div>
               <Formik
-                initialValues={{
-                  name: '',
-                  pass: '',
-                  passConfirm: '',
-                }}
+                initialValues={{ name: '', pass: '', passConfirm: '' }}
                 validate={(values) => {
                   const errors = {};
                   if (values.passConfirm.length > 0 && values.pass !== values.passConfirm) {

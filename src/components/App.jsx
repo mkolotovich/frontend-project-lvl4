@@ -17,7 +17,7 @@ import NotFound from './NotFoundPage.jsx';
 import SignupPage from './SignupPage.jsx';
 import AuthButton from './AuthButton.jsx';
 import AuthContext from '../contexts/index.jsx';
-import Modals from './Modals.jsx';
+import HomePage from './PrivatePage.jsx';
 import routes from '../routes.js';
 
 if (process.env.NODE_ENV !== 'production') {
@@ -75,7 +75,7 @@ export default function App(props) {
               </nav>
               <Routes>
                 <Route path={routes.logInPath()} element={<LoginPage />} />
-                <Route path={routes.rootPath()} element={<Modals />} />
+                <Route path={routes.rootPath()} element={<HomePage />} />
                 <Route path={routes.signUpPath()} element={<SignupPage />} />
                 <Route path={routes.notFoundPath()} element={<NotFound />} />
               </Routes>

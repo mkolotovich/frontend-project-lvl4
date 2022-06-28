@@ -3,7 +3,7 @@ import produce from 'immer';
 
 const initialState = {
   modals: [
-    { id: 0, show: false }, { id: 1, show: false }, { id: 2, show: false },
+    { show: false, type: 'add' }, { show: false, type: 'remove', channel: null }, { show: false, type: 'rename', channel: null },
   ],
 };
 
@@ -13,20 +13,23 @@ const modalsSlice = createSlice({
   reducers: {
     setModalActive: (state, action) => {
       const newState = state;
-      const id = action.payload;
+      const { type, channel } = action.payload;
       const updatedModalsArray = produce(state.modals, (draft) => {
         const newDraft = draft;
-        const index = draft.findIndex((todo) => todo.id === id);
-        if (index !== -1) newDraft[index].show = true;
+        const index = draft.findIndex((modal) => modal.type === type);
+        if (index !== -1) {
+          newDraft[index].show = true;
+          newDraft[index].channel = channel;
+        }
       });
       newState.modals = updatedModalsArray;
     },
     setModalHide: (state, action) => {
       const newState = state;
-      const id = action.payload;
+      const type = action.payload;
       const updatedModalsArray = produce(state.modals, (draft) => {
         const newDraft = draft;
-        const index = draft.findIndex((todo) => todo.id === id);
+        const index = draft.findIndex((modal) => modal.type === type);
         if (index !== -1) newDraft[index].show = false;
       });
       newState.modals = updatedModalsArray;

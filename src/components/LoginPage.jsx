@@ -34,10 +34,7 @@ function Login() {
                 <img className="rounded-circle" src="http://kolotovich-hexlet-messenger.surge.sh/images/avatar_3.jpg" alt={t('logIn')} />
               </div>
               <Formik
-                initialValues={{
-                  name: '',
-                  pass: '',
-                }}
+                initialValues={{ name: '', pass: '' }}
                 validationSchema={SignupSchema}
                 onSubmit={async (values) => {
                   const { name, pass } = values;
