@@ -15,9 +15,8 @@ const SignupSchema = (allChannels) => Yup.object().shape({
 export default function RenameChannelModal(props) {
   const auth = useAuth();
   const { modal, handle } = props;
-  const allModals = useSelector((state) => state.modals.modals);
-  const currentModal = allModals.find((el) => el.type === modal);
-  const { show, type, channel } = currentModal;
+  const modals = useSelector((state) => state.modals.modals);
+  const { isShow, type, channel } = modals;
   const id = channel === null ? null : channel.id;
   const name = channel === null ? null : channel.name;
   const allChannels = useSelector((state) => state.channels.channels);
@@ -44,12 +43,12 @@ export default function RenameChannelModal(props) {
           }
         });
         toast(t('channelRenamed'));
-        handle(type)();
+        handle()();
         value.channelName = '';
       }}
     >
       {({ errors, isValid, values }) => (
-        <Modal show={show} onHide={handle(type)} centered>
+        <Modal show={type === modal && isShow} onHide={handle(type)} centered>
           <Modal.Header closeButton>
             <Modal.Title>{t('renameChannel')}</Modal.Title>
           </Modal.Header>

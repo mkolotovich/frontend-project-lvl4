@@ -72,7 +72,7 @@ function Login() {
               <div className="text-center">
                 <span>{t('noAccount')}</span>
                 {' '}
-                <a href="/signup">{t('registration')}</a>
+                <a href={routes.signUpPath()}>{t('registration')}</a>
               </div>
             </div>
           </div>

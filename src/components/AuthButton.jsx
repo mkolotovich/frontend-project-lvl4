@@ -19,7 +19,7 @@ export default function AuthButton() {
       ? (
         <Button onClick={() => {
           auth.logOut();
-          navigate('/login');
+          navigate(routes.logInPath());
         }}
         >
           {t('logOut')}

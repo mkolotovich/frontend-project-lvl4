@@ -9,6 +9,8 @@ import {
   Route,
   Link,
   Routes,
+  useLocation,
+  Navigate,
 } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { ErrorBoundary, Provider } from '@rollbar/react';
@@ -19,6 +21,7 @@ import AuthButton from './AuthButton.jsx';
 import AuthContext from '../contexts/index.jsx';
 import HomePage from './PrivatePage.jsx';
 import routes from '../routes.js';
+import useAuth from '../hooks/index.jsx';
 
 if (process.env.NODE_ENV !== 'production') {
   localStorage.debug = 'chat:*';
@@ -58,6 +61,14 @@ function AuthProvider({ children, socket }) {
   );
 }
 
+function PrivateRoute({ children }) {
+  const auth = useAuth();
+  const location = useLocation();
+  return (
+    auth.loggedIn ? children : <Navigate to={routes.logInPath()} state={{ from: location }} />
+  );
+}
+
 export default function App(props) {
   const { t } = useTranslation();
   const { socket } = props;
@@ -75,7 +86,14 @@ export default function App(props) {
               </nav>
               <Routes>
                 <Route path={routes.logInPath()} element={<LoginPage />} />
-                <Route path={routes.rootPath()} element={<HomePage />} />
+                <Route
+                  path={routes.rootPath()}
+                  element={(
+                    <PrivateRoute>
+                      <HomePage />
+                    </PrivateRoute>
+                  )}
+                />
                 <Route path={routes.signUpPath()} element={<SignupPage />} />
                 <Route path={routes.notFoundPath()} element={<NotFound />} />
               </Routes>

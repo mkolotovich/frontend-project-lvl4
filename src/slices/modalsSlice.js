@@ -2,9 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import produce from 'immer';
 
 const initialState = {
-  modals: [
-    { show: false, type: 'add' }, { show: false, type: 'remove', channel: null }, { show: false, type: 'rename', channel: null },
-  ],
+  modals: { isShow: false, type: null, channel: null },
 };
 
 const modalsSlice = createSlice({
@@ -14,25 +12,21 @@ const modalsSlice = createSlice({
     setModalActive: (state, action) => {
       const newState = state;
       const { type, channel } = action.payload;
-      const updatedModalsArray = produce(state.modals, (draft) => {
+      const updatedModals = produce(state.modals, (draft) => {
         const newDraft = draft;
-        const index = draft.findIndex((modal) => modal.type === type);
-        if (index !== -1) {
-          newDraft[index].show = true;
-          newDraft[index].channel = channel;
-        }
+        newDraft.isShow = true;
+        newDraft.channel = channel;
+        newDraft.type = type;
       });
-      newState.modals = updatedModalsArray;
+      newState.modals = updatedModals;
     },
-    setModalHide: (state, action) => {
+    setModalHide: (state) => {
       const newState = state;
-      const type = action.payload;
-      const updatedModalsArray = produce(state.modals, (draft) => {
+      const updatedModals = produce(state.modals, (draft) => {
         const newDraft = draft;
-        const index = draft.findIndex((modal) => modal.type === type);
-        if (index !== -1) newDraft[index].show = false;
+        newDraft.isShow = false;
       });
-      newState.modals = updatedModalsArray;
+      newState.modals = updatedModals;
     },
   },
 });

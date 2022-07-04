@@ -8,13 +8,12 @@ import useAuth from '../../hooks/index.jsx';
 export default function RemoveChannelModal(props) {
   const auth = useAuth();
   const { modal, handle } = props;
-  const allModals = useSelector((state) => state.modals.modals);
-  const currentModal = allModals.find((el) => el.type === modal);
-  const { show, type, channel } = currentModal;
+  const modals = useSelector((state) => state.modals.modals);
+  const { isShow, type, channel } = modals;
   const id = channel === null ? null : channel.id;
   const { t } = useTranslation();
   return (
-    <Modal show={show} onHide={handle(type)} centered>
+    <Modal show={type === modal && isShow} onHide={handle(type)} centered>
       <Modal.Header closeButton>
         <Modal.Title>{t('removeChannel')}</Modal.Title>
       </Modal.Header>
@@ -31,7 +30,7 @@ export default function RemoveChannelModal(props) {
                 }
               });
               toast(t('channelRemoved'));
-              handle(type)();
+              handle()();
             }}
           >
             {t('remove')}

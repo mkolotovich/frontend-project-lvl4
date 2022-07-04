@@ -12,7 +12,7 @@ export const channelSwitchHandler = (id, allChannels, dispatch) => {
   dispatch(changeChannel(currentChannelId));
 };
 
-export const handleShow = (dispatch, evt, type, channel) => {
+export const handleShow = (dispatch, evt, type, channel = null) => {
   const clojure = () => {
     evt.preventDefault();
     dispatch(setModalActive({ type, channel }));
@@ -22,7 +22,7 @@ export const handleShow = (dispatch, evt, type, channel) => {
 
 export function Modals() {
   const dispatch = useDispatch();
-  const handleClose = (type) => () => dispatch(setModalHide(type));
+  const handleClose = () => () => dispatch(setModalHide());
   return (
     <>
       <AddChannelModal modal="add" handle={handleClose} />

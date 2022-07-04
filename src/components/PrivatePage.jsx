@@ -1,6 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useEffect, useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { Formik, Form, Field } from 'formik';
 import axios from 'axios';
 import { Dropdown, ButtonGroup } from 'react-bootstrap';
@@ -20,7 +19,6 @@ function Home() {
   const activeChannelClass = (id) => (currentChannelId === id ? 'btn-secondary btn text-start w-100 text-truncate rounded-0' : 'btn text-start w-100 text-truncate rounded-0');
   const allChannelMessages = allMessages.filter((el) => el.channelId === currentChannelId);
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const auth = useAuth();
   const [inputValue, setValue] = useState('');
   const { t } = useTranslation();
@@ -33,14 +31,10 @@ function Home() {
       dispatch(getAllChannels(channels));
       dispatch(getAllMessages(messages));
     };
-    if (localStorage.getItem('user')) {
-      try {
-        request();
-      } catch (err) {
-        toast(t('networkError'));
-      }
-    } else {
-      navigate(routes.logInPath());
+    try {
+      request();
+    } catch (err) {
+      toast(t('networkError'));
     }
   }, []);
   useEffect(() => {
@@ -83,8 +77,8 @@ function Home() {
                     <span className="visually-hidden">{t('channelManagment')}</span>
                   </Dropdown.Toggle>
                   <Dropdown.Menu>
-                    <Dropdown.Item href="#/action-1" onClick={(evt) => handleShow(dispatch, evt, 'remove', channel)}>{t('remove')}</Dropdown.Item>
-                    <Dropdown.Item href="#/action-2" onClick={(evt) => handleShow(dispatch, evt, 'rename', channel)}>{t('rename')}</Dropdown.Item>
+                    <Dropdown.Item href="#" onClick={(evt) => handleShow(dispatch, evt, 'remove', channel)}>{t('remove')}</Dropdown.Item>
+                    <Dropdown.Item href="#" onClick={(evt) => handleShow(dispatch, evt, 'rename', channel)}>{t('rename')}</Dropdown.Item>
                   </Dropdown.Menu>
                 </Dropdown>
                 )}
