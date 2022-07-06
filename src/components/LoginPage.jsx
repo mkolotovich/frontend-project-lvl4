@@ -45,7 +45,7 @@ function Login() {
                     logIn(token, username);
                     navigate(routes.rootPath());
                   } catch (err) {
-                    setError(!error);
+                    setError(true);
                   }
                 }}
               >
