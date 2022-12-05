@@ -24,4 +24,4 @@ open http://localhost:5000
 [![Actions Status](https://github.com/mkolotovich/frontend-project-lvl4/workflows/hexlet-check/badge.svg)](https://github.com/mkolotovich/frontend-project-lvl4/actions)
 [![Maintainability](https://api.codeclimate.com/v1/badges/98b33595bda4c915a01f/maintainability)](https://codeclimate.com/github/mkolotovich/frontend-project-lvl4/maintainability)
 
-link on heroku - https://kolotovich.herokuapp.com/
+link on railway - https://frontend-project-lvl4-production-dc54.up.railway.app/
