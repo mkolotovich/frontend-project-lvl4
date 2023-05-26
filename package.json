@@ -21,7 +21,7 @@
   "license": "ISC",
   "homepage": "",
   "engines": {
-    "node": "17.x"
+    "node": "18.x"
   },
   "dependencies": {
     "@reduxjs/toolkit": "*",
